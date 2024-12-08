@@ -6,33 +6,11 @@ import FlutterMacOS
 class AppDelegate: FlutterAppDelegate {
     private var statusItem: NSStatusItem?
     private var menubarPanel: NSPanel?
-    private var popover: NSPopover?
     private var mainWindow: NSWindow?
     private var menubarFlutterViewController: FlutterViewController?
     private var mainFlutterViewController: FlutterViewController?
 
     override func applicationDidFinishLaunching(_ notification: Notification) {
-        // Initialize main window Flutter controller
-        mainFlutterViewController = FlutterViewController(
-            nibName: nil,
-            bundle: nil
-        )
-
-        // Create and configure main window
-        mainWindow = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 800, height: 600),
-            styleMask: [.titled, .closable, .miniaturizable, .resizable],
-            backing: .buffered,
-            defer: false
-        )
-
-        if let mainWindow = mainWindow {
-            mainWindow.contentViewController = mainFlutterViewController
-            mainWindow.center()  // Center the window
-            mainWindow.title = "My App"
-            mainWindow.makeKeyAndOrderFront(nil)
-        }
-
         // Create status item in menu bar
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         if let button = statusItem?.button {
@@ -41,11 +19,8 @@ class AppDelegate: FlutterAppDelegate {
             button.action = #selector(self.toggleMenubar)
         }
 
-        let menubarProject = FlutterDartProject()
-        // Initialize menubar Flutter controller with separate engine
+        // Initialize menubar Flutter controller
         menubarFlutterViewController = FlutterViewController(
-            engine: FlutterEngine(name: "menubar", project: menubarProject),
-            initialRoute: "/test",
             nibName: nil,
             bundle: nil
         )
@@ -58,12 +33,6 @@ class AppDelegate: FlutterAppDelegate {
             backing: .buffered,
             defer: false
         )
-
-        let popover = NSPopover()
-        popover.contentSize = NSSize(width: 350, height: 350)
-        popover.behavior = .transient
-        popover.contentViewController = menubarFlutterViewController
-        self.popover = popover
 
         if let menubarPanel = menubarPanel {
             menubarPanel.contentViewController = menubarFlutterViewController
@@ -80,19 +49,6 @@ class AppDelegate: FlutterAppDelegate {
 
             // This makes it behave more like a native menu
             menubarPanel.worksWhenModal = true
-        }
-
-        // Setup method channels for both controllers
-        if let mainController = mainFlutterViewController {
-            let mainChannel = FlutterMethodChannel(
-                name: "com.example.app/main",
-                binaryMessenger: mainController.engine.binaryMessenger
-            )
-
-            mainChannel.setMethodCallHandler { [weak self] call, result in
-                // Handle main window method calls
-                result(FlutterMethodNotImplemented)
-            }
         }
 
         if let menubarController = menubarFlutterViewController {
@@ -115,51 +71,96 @@ class AppDelegate: FlutterAppDelegate {
             // Run menubar Flutter engine with different entry point
             menubarController.engine.run(withEntrypoint: "menubarMain")
         }
-
-        RegisterGeneratedPlugins(registry: mainFlutterViewController!)
+        launchNewWindow(initialRoute: nil, customEntryPoint: nil)
         RegisterGeneratedPlugins(registry: menubarFlutterViewController!)
-        
+
 
         super.applicationDidFinishLaunching(notification)
     }
+    
+    func launchNewWindow(initialRoute: String?, customEntryPoint: String?) {
+        let window = NSWindow(
+            contentRect: NSRect(x: 0, y: 0, width: 800, height: 600),
+            styleMask: [.titled, .closable, .miniaturizable, .resizable],
+            backing: .buffered,
+            defer: false
+        )
+        
+        
+        let controller = FlutterViewController(
+            nibName: nil,
+            bundle: nil
+        )
+        
+        // Lets setup channels
+        let mainChannel = FlutterMethodChannel(
+            name: "com.example.app/main",
+            binaryMessenger: controller.engine.binaryMessenger
+        )
+
+        mainChannel.setMethodCallHandler { [weak self] call, result in
+            // Handle main window method calls
+            switch call.method {
+            case "addWindow":
+                if let args = call.arguments as? Dictionary<String, Any> {
+                    let initialRoute = args["initialRoute"] as? String
+                    let customEntryPoint = args["customEntryPoint"] as? String
+                    self!.launchNewWindow(initialRoute: initialRoute, customEntryPoint: customEntryPoint)
+                } else {
+                    self!.launchNewWindow(initialRoute: nil, customEntryPoint: nil)
+                }
+                
+                result(nil)
+            default:
+                result(FlutterMethodNotImplemented)
+            }
+        }
+        
+        
+        window.contentViewController = controller
+        window.center()  // Center the window
+        window.title = "My App"
+        window.makeKeyAndOrderFront(nil)
+        RegisterGeneratedPlugins(registry: controller)
+        
+        controller.engine.run(withEntrypoint: customEntryPoint)
+    }
 
     @objc func toggleMenubar(_ sender: NSButton) {
-                guard let button = statusItem?.button,
-                    let menubarPanel = menubarPanel else {
-                    print("Error: Missing button or menubar window")
-                    return
-                }
+        guard let button = statusItem?.button,
+            let menubarPanel = menubarPanel else {
+            print("Error: Missing button or menubar window")
+            return
+        }
 
-                if menubarPanel.isVisible {
-                    menubarPanel.orderOut(nil)  // Changed from close() to orderOut()
-                } else {
-                    // Get the status item's frame in screen coordinates
-                    guard let buttonFrame = button.window?.convertToScreen(button.frame) else {
-                        print("Error: Could not get button frame")
-                        return
-                    }
+        if menubarPanel.isVisible {
+            menubarPanel.orderOut(nil)  // Changed from close() to orderOut()
+        } else {
+            // Get the status item's frame in screen coordinates
+            guard let buttonFrame = button.window?.convertToScreen(button.frame) else {
+                print("Error: Could not get button frame")
+                return
+            }
 
-                    let w = CGFloat(250)
-                    let h = CGFloat(250)
-                    // Calculate the window position(mid of button called it)
-                    let windowRect = NSRect(
-                        x: buttonFrame.midX - w/2,
-                        y: buttonFrame.minY - h,
-                        width: w,
-                        height: h
-                    )
+            let w = CGFloat(300)
+            let h = CGFloat(400)
+            // Calculate the window position(mid of button called it)
+            let windowRect = NSRect(
+                x: buttonFrame.midX - w/2,
+                y: buttonFrame.minY - h,
+                width: w,
+                height: h
+            )
 
-                    menubarPanel.setFrame(windowRect, display: true)
-                    menubarPanel.orderFrontRegardless()
+            menubarPanel.setFrame(windowRect, display: true)
+            menubarPanel.orderFrontRegardless()
 
-                    // Set the window frame and show it
-                    menubarPanel.setFrame(windowRect, display: true)
-                    menubarPanel.makeKeyAndOrderFront(nil)
-                    menubarPanel.orderFront(nil)
+            
+        
 
-                    // Make sure the window is the key window and app is active
-                    menubarPanel.makeKey()
-                    NSApp.activate(ignoringOtherApps: true)
-                }
+            // Make sure the window is the key window and app is active
+            menubarPanel.makeKey()
+            NSApp.activate(ignoringOtherApps: true)
+        }
     }
 }

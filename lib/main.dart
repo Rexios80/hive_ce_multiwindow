@@ -52,8 +52,19 @@ class MainApp extends StatelessWidget {
         appBar: AppBar(
           title: const Text('Main Window'),
         ),
-        body: const Center(
-          child: Text('Hello from the main window!'),
+        body: Center(
+          child: Column(
+            children: [
+              const Text('Hello from the main window!'),
+              MaterialButton(
+                  onPressed: () {
+                    // Call the platform channel to show the main window
+                    const platform = MethodChannel('com.example.app/main');
+                    platform.invokeMethod('addWindow', {"initialRoute": "/test123"});
+                  },
+                  child: Text("Launch new window"))
+            ],
+          ),
         ),
       ),
     );
