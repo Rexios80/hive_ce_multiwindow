@@ -4,20 +4,17 @@ import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:window_manager/window_manager.dart';
 
 void main() async {
-  // Ensure Flutter bindings are initialized
   WidgetsFlutterBinding.ensureInitialized();
 
   await IsolatedHive.initFlutter();
   final box = await IsolatedHive.openBox('counter');
 
-  // Initialize window manager
   await windowManager.ensureInitialized();
 
-  // Setup window options
-  WindowOptions windowOptions = const WindowOptions(
+  const windowOptions = WindowOptions(
     size: Size(800, 600),
     center: true,
-    title: "My MacOS App",
+    title: 'My MacOS App',
   );
 
   await windowManager.waitUntilReadyToShow(windowOptions, () async {
@@ -25,28 +22,16 @@ void main() async {
     await windowManager.focus();
   });
 
-  // Create platform channel for communicating with native code
-  const platform = MethodChannel('com.example.app/system_tray');
-
   final count = await box.get(0, defaultValue: 0);
-
-  // Initialize both the main window and menubar window
   runApp(MainApp(initialCount: count));
 
-  // Setup method call handler for platform channel
+  const platform = MethodChannel('com.example.app/system_tray');
   platform.setMethodCallHandler((call) async {
     if (call.method == 'showMainWindow') {
       await windowManager.show();
       await windowManager.focus();
     }
   });
-}
-
-@pragma('vm:entry-point')
-void menubarMain() {
-  // Menu bar entry point
-  WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MenuBarWindow());
 }
 
 class MainApp extends StatelessWidget {
@@ -59,9 +44,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Main Window'),
-        ),
+        appBar: AppBar(title: const Text('Main Window')),
         body: Center(
           child: Column(
             children: [
@@ -70,10 +53,11 @@ class MainApp extends StatelessWidget {
                 onPressed: () {
                   // Call the platform channel to show the main window
                   const platform = MethodChannel('com.example.app/main');
-                  platform
-                      .invokeMethod('addWindow', {"initialRoute": "/test123"});
+                  platform.invokeMethod('addWindow', {
+                    'initialRoute': '/test123',
+                  });
                 },
-                child: Text("Launch new window"),
+                child: const Text('Launch new window'),
               ),
               StreamBuilder<int>(
                 initialData: initialCount,
@@ -91,22 +75,6 @@ class MainApp extends StatelessWidget {
           child: const Icon(Icons.add),
         ),
       ),
-    );
-  }
-}
-
-// menubar_window.dart
-
-class MenuBarWindow extends StatelessWidget {
-  const MenuBarWindow({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Container(
-          width: 300,
-          color: Colors.white,
-          child: Text("Hello from topbar menu")),
     );
   }
 }
