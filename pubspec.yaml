@@ -35,6 +35,8 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   window_manager: ^0.4.3
+  hive_ce: any
+  hive_ce_flutter: any
 
 dev_dependencies:
   flutter_test:
@@ -46,6 +48,12 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^4.0.0
+
+dependency_overrides:
+  hive_ce:
+    path: ../hive_ce/hive
+  hive_ce_flutter:
+    path: ../hive_ce/hive_flutter
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

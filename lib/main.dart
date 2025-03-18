@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:window_manager/window_manager.dart';
 
 void main() async {
   // Ensure Flutter bindings are initialized
   WidgetsFlutterBinding.ensureInitialized();
+
+  await IsolatedHive.initFlutter();
+  final box = await IsolatedHive.openBox('counter');
+
   // Initialize window manager
   await windowManager.ensureInitialized();
 
@@ -23,8 +28,10 @@ void main() async {
   // Create platform channel for communicating with native code
   const platform = MethodChannel('com.example.app/system_tray');
 
+  final count = await box.get(0, defaultValue: 0);
+
   // Initialize both the main window and menubar window
-  runApp(const MainApp());
+  runApp(MainApp(initialCount: count));
 
   // Setup method call handler for platform channel
   platform.setMethodCallHandler((call) async {
@@ -43,7 +50,10 @@ void menubarMain() {
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+  final box = IsolatedHive.box('counter');
+  final int initialCount;
+
+  MainApp({super.key, required this.initialCount});
 
   @override
   Widget build(BuildContext context) {
@@ -57,14 +67,28 @@ class MainApp extends StatelessWidget {
             children: [
               const Text('Hello from the main window!'),
               MaterialButton(
-                  onPressed: () {
-                    // Call the platform channel to show the main window
-                    const platform = MethodChannel('com.example.app/main');
-                    platform.invokeMethod('addWindow', {"initialRoute": "/test123"});
-                  },
-                  child: Text("Launch new window"))
+                onPressed: () {
+                  // Call the platform channel to show the main window
+                  const platform = MethodChannel('com.example.app/main');
+                  platform
+                      .invokeMethod('addWindow', {"initialRoute": "/test123"});
+                },
+                child: Text("Launch new window"),
+              ),
+              StreamBuilder<int>(
+                initialData: initialCount,
+                stream: box.watch().map((event) => event.value),
+                builder: (context, snap) => Text('${snap.data}'),
+              ),
             ],
           ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            final current = await box.get(0, defaultValue: 0);
+            await box.put(0, current + 1);
+          },
+          child: const Icon(Icons.add),
         ),
       ),
     );
@@ -79,7 +103,10 @@ class MenuBarWindow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Container(width: 300, color: Colors.white, child: Text("Hello from topbar menu")),
+      home: Container(
+          width: 300,
+          color: Colors.white,
+          child: Text("Hello from topbar menu")),
     );
   }
 }
