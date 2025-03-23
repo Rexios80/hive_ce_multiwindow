@@ -37,10 +37,10 @@ packages:
     dependency: transitive
     description:
       name: async
-      sha256: d2872f9c19731c2e5f10444b14686eb7cc85c76274bd6c16e1816bff9a3bab63
+      sha256: "758e6d74e971c3e5aceb4110bfd6698efc7f501675bcfe0c775459a8140750eb"
       url: "https://pub.dev"
     source: hosted
-    version: "2.12.0"
+    version: "2.13.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -209,30 +209,24 @@ packages:
   hive_ce:
     dependency: "direct main"
     description:
-      path: hive
-      ref: cf372903350fe10e99480c9232f2a0805d96dd9c
-      resolved-ref: cf372903350fe10e99480c9232f2a0805d96dd9c
-      url: "https://github.com/IO-Design-Team/hive_ce"
-    source: git
-    version: "2.10.1"
+      path: "../hive_ce/hive"
+      relative: true
+    source: path
+    version: "2.11.0-pre.5"
   hive_ce_flutter:
     dependency: "direct main"
     description:
-      path: hive_flutter
-      ref: cf372903350fe10e99480c9232f2a0805d96dd9c
-      resolved-ref: cf372903350fe10e99480c9232f2a0805d96dd9c
-      url: "https://github.com/IO-Design-Team/hive_ce"
-    source: git
-    version: "2.2.0"
+      path: "../hive_ce/hive_flutter"
+      relative: true
+    source: path
+    version: "2.3.0-pre.1"
   hive_ce_generator:
     dependency: "direct overridden"
     description:
-      path: hive_generator
-      ref: cf372903350fe10e99480c9232f2a0805d96dd9c
-      resolved-ref: cf372903350fe10e99480c9232f2a0805d96dd9c
-      url: "https://github.com/IO-Design-Team/hive_ce"
-    source: git
-    version: "1.8.2"
+      path: "../hive_ce/hive_generator"
+      relative: true
+    source: path
+    version: "1.9.0-pre.1"
   hotreloader:
     dependency: transitive
     description:
@@ -245,10 +239,10 @@ packages:
     dependency: transitive
     description:
       name: isolate_channel
-      sha256: b667af2d970626e9df41fcddcdd4fedae009e1148f79e10674b1572e73b6b17f
+      sha256: "70f80485767374a8c61c6fbde8cc014a7f401915d9ec72d916a077f2fd86bc1c"
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.0"
+    version: "0.2.1"
   json_annotation:
     dependency: transitive
     description:
@@ -562,10 +556,10 @@ packages:
     dependency: transitive
     description:
       name: vm_service
-      sha256: "0968250880a6c5fe7edc067ed0a13d4bae1577fe2771dcf3010d52c4a9d3ca14"
+      sha256: ddfa8d30d89985b96407efce8acbdd124701f96741f2d981ca860662f1c0dc02
       url: "https://pub.dev"
     source: hosted
-    version: "14.3.1"
+    version: "15.0.0"
   watcher:
     dependency: transitive
     description:
