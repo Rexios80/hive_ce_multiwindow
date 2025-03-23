@@ -49,14 +49,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.2"
-  build:
-    dependency: transitive
-    description:
-      name: build
-      sha256: cef23f1eda9b57566c81e2133d196f8e3df48f244b317368d65c5943d91148f0
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.4.2"
   characters:
     dependency: transitive
     description:
@@ -209,24 +201,19 @@ packages:
   hive_ce:
     dependency: "direct main"
     description:
-      path: "../hive_ce/hive"
-      relative: true
-    source: path
+      name: hive_ce
+      sha256: fd7dc78776ece38134f89fce2d275a1a8d843b8756b6f04de4b59a70bbd6ba87
+      url: "https://pub.dev"
+    source: hosted
     version: "2.11.0-pre.5"
   hive_ce_flutter:
     dependency: "direct main"
     description:
-      path: "../hive_ce/hive_flutter"
-      relative: true
-    source: path
+      name: hive_ce_flutter
+      sha256: e95b5b51640a2b95f63744a66b56275b9591ee66c984456fb6526e7a2a27112d
+      url: "https://pub.dev"
+    source: hosted
     version: "2.3.0-pre.1"
-  hive_ce_generator:
-    dependency: "direct overridden"
-    description:
-      path: "../hive_ce/hive_generator"
-      relative: true
-    source: path
-    version: "1.9.0-pre.1"
   hotreloader:
     dependency: transitive
     description:
@@ -448,22 +435,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  source_gen:
-    dependency: transitive
-    description:
-      name: source_gen
-      sha256: "35c8150ece9e8c8d263337a265153c3329667640850b9304861faea59fc98f6b"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.0"
-  source_helper:
-    dependency: transitive
-    description:
-      name: source_helper
-      sha256: "86d247119aedce8e63f4751bd9626fc9613255935558447569ad42f9f5b48b3c"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.3.5"
   source_span:
     dependency: transitive
     description:
@@ -600,14 +571,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.3"
-  yaml_writer:
-    dependency: transitive
-    description:
-      name: yaml_writer
-      sha256: "69651cd7238411179ac32079937d4aa9a2970150d6b2ae2c6fe6de09402a5dc5"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.1.0"
 sdks:
   dart: ">=3.7.0 <4.0.0"
   flutter: ">=3.27.0"
