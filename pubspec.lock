@@ -202,18 +202,18 @@ packages:
     dependency: "direct main"
     description:
       name: hive_ce
-      sha256: fd7dc78776ece38134f89fce2d275a1a8d843b8756b6f04de4b59a70bbd6ba87
+      sha256: "68849dde1594d9ebd1af76b8a79d8ed5018a445e43e6aa7abb2e8e1c7bf5c863"
       url: "https://pub.dev"
     source: hosted
-    version: "2.11.0-pre.5"
+    version: "2.11.0-pre.10"
   hive_ce_flutter:
     dependency: "direct main"
     description:
       name: hive_ce_flutter
-      sha256: e95b5b51640a2b95f63744a66b56275b9591ee66c984456fb6526e7a2a27112d
+      sha256: "100c3ed35b13a3bd52b1b865711745da195e379a246ac200ce49e2f39aebb265"
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.0-pre.1"
+    version: "2.3.0-pre.2"
   hotreloader:
     dependency: transitive
     description:
@@ -226,10 +226,10 @@ packages:
     dependency: transitive
     description:
       name: isolate_channel
-      sha256: "70f80485767374a8c61c6fbde8cc014a7f401915d9ec72d916a077f2fd86bc1c"
+      sha256: bafedfbcc1e9796ada179b5dac7043b33eb85d35204b089ca37d480d9c0068df
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.1"
+    version: "0.2.2"
   json_annotation:
     dependency: transitive
     description:
@@ -306,10 +306,10 @@ packages:
     dependency: transitive
     description:
       name: path_provider_android
-      sha256: "0ca7359dad67fd7063cb2892ab0c0737b2daafd807cf1acecd62374c8fae6c12"
+      sha256: d0d310befe2c8ab9e7f393288ccbb11b60c019c6b5afc21973eeee4dda2b35e9
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.16"
+    version: "2.2.17"
   path_provider_foundation:
     dependency: transitive
     description:

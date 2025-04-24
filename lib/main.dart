@@ -6,8 +6,8 @@ import 'package:window_manager/window_manager.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await IsolatedHive.initFlutter();
-  final box = await IsolatedHive.openBox('counter');
+  await Hive.initFlutter();
+  final box = await Hive.openBox('counter');
 
   await windowManager.ensureInitialized();
 
@@ -35,7 +35,7 @@ void main() async {
 }
 
 class MainApp extends StatelessWidget {
-  final box = IsolatedHive.box('counter');
+  final box = Hive.box('counter');
   final int initialCount;
 
   MainApp({super.key, required this.initialCount});
